@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *:not(input,checkbox,textarea) {
+        /*禁止文本选择*/
+        outline: none;
+        user-select: none; /* Non-prefixed version, currently */
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+    #BODY {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+     
+    }
+    #titleBAr {
+        width: 100%;
+        height: 20%;
+    }
+    #Toasts {
+        color: rgb(3, 129, 28);
+    }
+    #Main {
+        height: 80%;
+        width: 80%;
+        margin-left: 10%;
+        margin-right: 10%;
+        background-color: rgba(240, 248, 255, 0.624);
+
+    }
+    #Content {
+        height: 90%;
+        width: 100%;
+       
+    }
+    #results {
+        
+    }
+</style>
+<body>
+    <div id = "BODY">
+         <div id = "titleBar">
+            <div id = "Toasts">Message</div>
+            <button onclick = "setProblem(2, 10)">2->10</button>
+            <button onclick = "setProblem(10, 2)">10->2</button>
+            <button onclick = "setProblem(16, 10)">16->10</button>
+            <button onclick = "setProblem(10, 16)">10->16</button>
+            <button onclick = "set_xor()">xor^</button>
+            <button onclick = "setProblem()">bit>></button>
+            <button onclick = "toString_2()">toString</button>
+            <span id = "log">log:null</span>
+         </div>
+
+         <div id = "Main">
+             <div id = "Content">
+              
+             </div>
+             <button onclick = "on_start(this)">开始计时</button>
+         </div>
+    </div>
+</body>
+
+<script name = "逻辑函数">
+     
+</script>
+
+<script src = "https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+     
+     var TargetArray = new Array();
+
+     function on_start(el) {
+        if (el.innerText == '开始计时') {
+            ms1 = Date.now();
+            timer = setInterval(()=> {
+                $("#Toasts").text(((Date.now() - ms1) / 1000) + " sec")
+            });
+            el.innerText = "停止计时"
+        } else if (el.innerText == '停止计时') {
+            clearInterval(timer)
+            el.innerText = "开始计时"
+        }
+     }
+
+      
+     function log(text) {
+        $("#log").text("log:" + text);
+     }
+     
+
+     function toString_2() {
+        var num1 = prompt("请输入需要转换的数值");
+        var num2 = prompt("请输入需要转换的进制");
+        num1 = Number(num1);
+        let str = num1.toString(Number(num2)).toUpperCase();
+        log(str);
+     }
+
+     function getRandom(min, max) {
+            let num = Math.floor(Math.random() * (max - min) + min);
+            return TargetArray.indexOf(num) == -1 ? num : getRandom(min, max);
+     }
+
+     function set_xor() {
+        TargetArray = [];
+        log("xor");
+        var el = window.document.getElementById("Content");
+        var max = prompt("请输入最大值");
+        var min = 0;
+        var flag = confirm("是否出现负数")
+        el.innerHTML = ""
+        if (max == null || max == "") max = 100; 
+        if (flag == true) {
+            min = - max;
+        }
+        for (let i = 0; i < 10; i++) {
+            let num1 = getRandom(min, max);
+            let num2 = getRandom(min, max);
+            var target = num1 ^ num2;
+            TargetArray[TargetArray.length] = target;
+            el.innerHTML += '<div ><p class = "target">' + num1 + " xor " + num2 + ' = <input class = "results" type = "text" placeholder = "Enter the Results"/><button class = "Yes" value = "' + target + '"onclick = "Enter(this)">ok</button><span><span/></div>'
+        }
+     }
+
+
+     function setProblem(ft, rt) {
+          TargetArray = [];
+          log(ft + " to " + rt);
+          var el = window.document.getElementById("Content");
+          var max = prompt("请输入最大值");
+          if (max == null || max == "") max = 100; 
+          el.innerHTML = ""
+          for (let i = 0; i < 10; i++) {
+               var num = getRandom(0, Number(max));
+               var str = num.toString(ft).toUpperCase()
+               var target = num.toString(rt).toUpperCase()
+               TargetArray[TargetArray.length] = target;
+               el.innerHTML += '<div ><p class = "target">' + str + ' = <input class = "results" type = "text" placeholder = "Enter the Results"/><button class = "Yes" value = "' + target + '"onclick = "Enter(this)">ok</button><span><span/></div>'
+          }
+     }
+
+     function Enter(el) {
+         var parent = el.parentNode;
+         var res = parent.childNodes[1].value
+         var value = el.getAttribute('value')
+         if (res == value) {
+             parent.style.backgroundColor = "rgba(1, 220, 1, 0.449)"
+             parent.childNodes[3].innerText = "";
+         } else {
+             parent.style.backgroundColor = "rgba(255, 0, 0, 0.482)"
+             parent.childNodes[3].innerText = value;
+         }
+         
+     }
+
+</script>
+</html>
